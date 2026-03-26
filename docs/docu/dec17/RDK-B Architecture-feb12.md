@@ -6,7 +6,32 @@ The RDK-B middleware is designed as a collection of largely independent, compone
 
 ## Architecture Organisation
 
-RDK-B organizes components based on functionality and level of abstraction, with each group having clearly defined responsibilities. Within the middleware layer, components are largely independent and communicate with each other using IPC mechanisms, enabling modularity and selective inclusion based on device requirements. Hardware access is performed through HAL interfaces, with platform-specific implementations translating these interactions to the underlying system.
+RDK-B organizes software into a small set of layers based on abstraction and responsibility. At a high level, applications consume device capabilities through middleware services and common IPC, while the platform layer provides the OS, HAL interfaces, and vendor implementations that middleware uses to access hardware.
+
+```mermaid
+flowchart TB
+    %% Simple layered view (intentionally no application components)
+    subgraph APP["Application Layer"]
+        A["Applications (operator, web UI, third-party)"]
+    end
+
+    subgraph MW["Middleware Layer"]
+        direction TB
+        MW1["CCSP Components"]
+        MW2["IPC (RBUS)"]
+        MW3["Generic Open Source Components"]
+        MW4["RDK Unified Components"]
+    end
+
+    subgraph PLAT["Platform Layer"]
+        P1["HAL"]
+        P2["Linux"]
+        P1 --- P2
+    end
+
+    APP --> MW
+    MW --> PLAT
+```
 
 ![RDK-B Architecture](./Architecture.png)
 
